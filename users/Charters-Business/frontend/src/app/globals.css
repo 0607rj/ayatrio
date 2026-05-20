@@ -1,0 +1,224 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #b30437;
+  --navbar-height: 86px;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --navbar-height: 56px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --primary: #b30437;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  min-height: 100%;
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+}
+
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Bordered page container - fixes asymmetry on resize */
+.bordered-container {
+  box-sizing: border-box;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Styled horizontal scrollbar for card carousels */
+.custom-x-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #b7b7b7 #ececec;
+}
+
+.custom-x-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-x-scrollbar::-webkit-scrollbar-track {
+  background: #ececec;
+  border-radius: 9999px;
+}
+
+.custom-x-scrollbar::-webkit-scrollbar-thumb {
+  background: #b7b7b7;
+  border-radius: 9999px;
+}
+
+.custom-x-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9c9c9c;
+}
+
+@keyframes marqueeLeft {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marqueeLeft 14s linear infinite;
+}
+
+/* Masters Union Hero Card Transition */
+/* No CSS transition - handled by JS for smooth performance */
+.masters-union-card-transition {
+  transition: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Navbar transitions - Enhanced with slide effect */
+.navbar-transition {
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-secondary-transition {
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms ease;
+}
+
+.navbar-primary-slide {
+  transition:
+    transform 400ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-mobile-transition {
+  transition: all 200ms ease-in-out;
+}
+
+.navbar-mobile-slide {
+  transition: transform 200ms ease-in-out;
+}
+
+/* Hands-On Learning Component Transitions */
+.hands-on-container {
+  height: calc(var(--category-count, 5) * 100vh);
+}
+
+.hands-on-sticky-transition {
+  transition: all 200ms ease-in-out;
+}
+
+.hands-on-menu-transition {
+  transition: all 200ms ease-in-out;
+}
+
+.hands-on-card-container {
+  transition: none;
+}
+
+.hands-on-card-scale {
+  transition: none;
+}
+
+.hands-on-store-card {
+  transition: background-color 200ms ease-in-out;
+}
+
+.hands-on-cta-button {
+  transition: background-color 200ms ease-in-out;
+}
+
+/* First Step Success Component Styles */
+.first-step-card {
+  transition:
+    transform 200ms ease-in-out,
+    box-shadow 200ms ease-in-out;
+}
+
+.first-step-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Toast Notification Animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Full bleed background */
+.full-bleed {
+  position: relative;
+  z-index: 1;
+}
+
+.full-bleed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background: inherit;
+  z-index: -1;
+  pointer-events: none;
+}

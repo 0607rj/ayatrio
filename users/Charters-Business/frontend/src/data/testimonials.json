@@ -1,0 +1,362 @@
+[
+  {
+    "id": "openai",
+    "company": "OpenAI",
+    "logo": "OpenAI",
+    "quote": "There's power in a single platform where you can do all your work. Notion is that single place.",
+    "author": "Student Participant",
+    "role": "Student Participant",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    "category": "engineering"
+  },
+  {
+    "id": "ramp",
+    "company": "ramp",
+    "logo": "ramp ↗",
+    "quote": "With Notion, every person at Ramp has an AI assistant.",
+    "author": "Engineering Team Lead",
+    "role": "Engineering Team Lead",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "category": "engineering"
+  },
+  {
+    "id": "vercel",
+    "company": "▲Vercel",
+    "logo": "▲Vercel",
+    "quote": "Notion understands that you can solve a lot of problems with one tool.",
+    "author": "Operations Manager",
+    "role": "Operations Manager",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    "category": "engineering"
+  },
+  {
+    "id": "matchgroup",
+    "company": "MatchGroup",
+    "logo": "MatchGroup",
+    "quote": "Notion has been the most powerful and impactful way to streamline our workflow.",
+    "author": "HR Director",
+    "role": "HR Director",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+    "category": "engineering"
+  },
+  {
+    "id": "deel",
+    "company": "deel.",
+    "logo": "deel.",
+    "quote": "Someone could join Deel and onboard themselves without ever speaking to anybody.",
+    "author": "Tech Lead",
+    "role": "Tech Lead",
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    "category": "engineering"
+  },
+  {
+    "id": "planful",
+    "company": "planful",
+    "logo": "P planful",
+    "quote": "From six apps to one: Scaling faster with all teams running on Notion AI.",
+    "author": "Product Manager",
+    "role": "Product Manager",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+    "category": "engineering"
+  },
+  {
+    "id": "openai-product",
+    "company": "OpenAI",
+    "logo": "OpenAI",
+    "quote": "There's power in a single platform where you can do all your work. Notion is that single place.",
+    "author": "Product Manager",
+    "role": "Product Manager",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    "category": "product"
+  },
+  {
+    "id": "ramp-product",
+    "company": "ramp",
+    "logo": "ramp ↗",
+    "quote": "With Notion, every person at Ramp has an AI assistant.",
+    "author": "Product Lead",
+    "role": "Product Lead",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "category": "product"
+  },
+  {
+    "id": "vercel-product",
+    "company": "▲Vercel",
+    "logo": "▲Vercel",
+    "quote": "Notion understands that you can solve a lot of problems with one tool.",
+    "author": "Product Director",
+    "role": "Product Director",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    "category": "product"
+  },
+  {
+    "id": "matchgroup-product",
+    "company": "MatchGroup",
+    "logo": "MatchGroup",
+    "quote": "Notion has been the most powerful and impactful way to streamline our workflow.",
+    "author": "Product Owner",
+    "role": "Product Owner",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+    "category": "product"
+  },
+  {
+    "id": "deel-product",
+    "company": "deel.",
+    "logo": "deel.",
+    "quote": "Someone could join Deel and onboard themselves without ever speaking to anybody.",
+    "author": "Product Strategist",
+    "role": "Product Strategist",
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    "category": "product"
+  },
+  {
+    "id": "planful-product",
+    "company": "planful",
+    "logo": "P planful",
+    "quote": "From six apps to one: Scaling faster with all teams running on Notion AI.",
+    "author": "Product Manager",
+    "role": "Product Manager",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+    "category": "product"
+  },
+  {
+    "id": "openai-design",
+    "company": "OpenAI",
+    "logo": "OpenAI",
+    "quote": "There's power in a single platform where you can do all your work. Notion is that single place.",
+    "author": "Design Lead",
+    "role": "Design Lead",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    "category": "design"
+  },
+  {
+    "id": "ramp-design",
+    "company": "ramp",
+    "logo": "ramp ↗",
+    "quote": "With Notion, every person at Ramp has an AI assistant.",
+    "author": "UX Designer",
+    "role": "UX Designer",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "category": "design"
+  },
+  {
+    "id": "vercel-design",
+    "company": "▲Vercel",
+    "logo": "▲Vercel",
+    "quote": "Notion understands that you can solve a lot of problems with one tool.",
+    "author": "Creative Director",
+    "role": "Creative Director",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    "category": "design"
+  },
+  {
+    "id": "matchgroup-design",
+    "company": "MatchGroup",
+    "logo": "MatchGroup",
+    "quote": "Notion has been the most powerful and impactful way to streamline our workflow.",
+    "author": "UI Designer",
+    "role": "UI Designer",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+    "category": "design"
+  },
+  {
+    "id": "deel-design",
+    "company": "deel.",
+    "logo": "deel.",
+    "quote": "Someone could join Deel and onboard themselves without ever speaking to anybody.",
+    "author": "Design Manager",
+    "role": "Design Manager",
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    "category": "design"
+  },
+  {
+    "id": "planful-design",
+    "company": "planful",
+    "logo": "P planful",
+    "quote": "From six apps to one: Scaling faster with all teams running on Notion AI.",
+    "author": "Visual Designer",
+    "role": "Visual Designer",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+    "category": "design"
+  },
+  {
+    "id": "openai-it",
+    "company": "OpenAI",
+    "logo": "OpenAI",
+    "quote": "There's power in a single platform where you can do all your work. Notion is that single place.",
+    "author": "IT Director",
+    "role": "IT Director",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    "category": "it"
+  },
+  {
+    "id": "ramp-it",
+    "company": "ramp",
+    "logo": "ramp ↗",
+    "quote": "With Notion, every person at Ramp has an AI assistant.",
+    "author": "Systems Administrator",
+    "role": "Systems Administrator",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "category": "it"
+  },
+  {
+    "id": "vercel-it",
+    "company": "▲Vercel",
+    "logo": "▲Vercel",
+    "quote": "Notion understands that you can solve a lot of problems with one tool.",
+    "author": "DevOps Engineer",
+    "role": "DevOps Engineer",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    "category": "it"
+  },
+  {
+    "id": "matchgroup-it",
+    "company": "MatchGroup",
+    "logo": "MatchGroup",
+    "quote": "Notion has been the most powerful and impactful way to streamline our workflow.",
+    "author": "IT Specialist",
+    "role": "IT Specialist",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+    "category": "it"
+  },
+  {
+    "id": "deel-it",
+    "company": "deel.",
+    "logo": "deel.",
+    "quote": "Someone could join Deel and onboard themselves without ever speaking to anybody.",
+    "author": "Infrastructure Lead",
+    "role": "Infrastructure Lead",
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    "category": "it"
+  },
+  {
+    "id": "planful-it",
+    "company": "planful",
+    "logo": "P planful",
+    "quote": "From six apps to one: Scaling faster with all teams running on Notion AI.",
+    "author": "Cloud Engineer",
+    "role": "Cloud Engineer",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+    "category": "it"
+  },
+  {
+    "id": "openai-marketing",
+    "company": "OpenAI",
+    "logo": "OpenAI",
+    "quote": "There's power in a single platform where you can do all your work. Notion is that single place.",
+    "author": "Marketing Director",
+    "role": "Marketing Director",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    "category": "marketing"
+  },
+  {
+    "id": "ramp-marketing",
+    "company": "ramp",
+    "logo": "ramp ↗",
+    "quote": "With Notion, every person at Ramp has an AI assistant.",
+    "author": "Growth Manager",
+    "role": "Growth Manager",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "category": "marketing"
+  },
+  {
+    "id": "vercel-marketing",
+    "company": "▲Vercel",
+    "logo": "▲Vercel",
+    "quote": "Notion understands that you can solve a lot of problems with one tool.",
+    "author": "Content Manager",
+    "role": "Content Manager",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    "category": "marketing"
+  },
+  {
+    "id": "matchgroup-marketing",
+    "company": "MatchGroup",
+    "logo": "MatchGroup",
+    "quote": "Notion has been the most powerful and impactful way to streamline our workflow.",
+    "author": "Digital Marketing Lead",
+    "role": "Digital Marketing Lead",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+    "category": "marketing"
+  },
+  {
+    "id": "deel-marketing",
+    "company": "deel.",
+    "logo": "deel.",
+    "quote": "Someone could join Deel and onboard themselves without ever speaking to anybody.",
+    "author": "Marketing Strategist",
+    "role": "Marketing Strategist",
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    "category": "marketing"
+  },
+  {
+    "id": "planful-marketing",
+    "company": "planful",
+    "logo": "P planful",
+    "quote": "From six apps to one: Scaling faster with all teams running on Notion AI.",
+    "author": "Brand Manager",
+    "role": "Brand Manager",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+    "category": "marketing"
+  },
+  {
+    "id": "openai-startups",
+    "company": "OpenAI",
+    "logo": "OpenAI",
+    "quote": "There's power in a single platform where you can do all your work. Notion is that single place.",
+    "author": "Founder",
+    "role": "Founder",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    "category": "startups"
+  },
+  {
+    "id": "ramp-startups",
+    "company": "ramp",
+    "logo": "ramp ↗",
+    "quote": "With Notion, every person at Ramp has an AI assistant.",
+    "author": "Co-Founder",
+    "role": "Co-Founder",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "category": "startups"
+  },
+  {
+    "id": "vercel-startups",
+    "company": "▲Vercel",
+    "logo": "▲Vercel",
+    "quote": "Notion understands that you can solve a lot of problems with one tool.",
+    "author": "Startup Founder",
+    "role": "Startup Founder",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+    "category": "startups"
+  },
+  {
+    "id": "matchgroup-startups",
+    "company": "MatchGroup",
+    "logo": "MatchGroup",
+    "quote": "Notion has been the most powerful and impactful way to streamline our workflow.",
+    "author": "Entrepreneur",
+    "role": "Entrepreneur",
+    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+    "category": "startups"
+  },
+  {
+    "id": "deel-startups",
+    "company": "deel.",
+    "logo": "deel.",
+    "quote": "Someone could join Deel and onboard themselves without ever speaking to anybody.",
+    "author": "Startup CEO",
+    "role": "Startup CEO",
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+    "category": "startups"
+  },
+  {
+    "id": "planful-startups",
+    "company": "planful",
+    "logo": "P planful",
+    "quote": "From six apps to one: Scaling faster with all teams running on Notion AI.",
+    "author": "Tech Entrepreneur",
+    "role": "Tech Entrepreneur",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+    "category": "startups"
+  }
+]
