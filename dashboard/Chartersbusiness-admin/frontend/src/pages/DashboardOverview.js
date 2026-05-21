@@ -2,7 +2,6 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { MAIN_APP_URL } from '../services/api';
 import PageLayout from '../components/Layout/PageLayout';
-import ContactSection from '../components/Dashboard/ContactSection';
 import ApplicationList from '../components/Dashboard/ApplicationList';
 import EnrollmentHero from '../components/Dashboard/EnrollmentHero';
 import CareerRoadmap from '../components/Dashboard/CareerRoadmap';
@@ -37,12 +36,7 @@ const DashboardOverview = () => {
                     <CareerRoadmap currentStep={2} />
                 </div>
 
-                {/* 3. Professional Support (Horizontal row with separators) */}
-                <div className="border-b border-border">
-                    <ContactSection />
-                </div>
-
-                {/* 4. Application Activity (Sharp Bottom Tracking) */}
+                {/* 3. Application Activity (Sharp Bottom Tracking) */}
                 <div>
                     <ApplicationList />
                 </div>
