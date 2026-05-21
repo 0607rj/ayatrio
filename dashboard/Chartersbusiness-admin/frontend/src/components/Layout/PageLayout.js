@@ -6,7 +6,8 @@ import {
   RiBookOpenLine, 
   RiShieldUserLine, 
   RiCalendarLine, 
-  RiLogoutBoxLine 
+  RiLogoutBoxLine,
+  RiArrowLeftLine
 } from 'react-icons/ri';
 import { useAuth } from '../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -19,7 +20,8 @@ export default function PageLayout({ children, title, subtitle, actions, fullWid
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   
-  const homeRoute = user?.role === 'admin' ? '/admin' : (user?.role === 'user' ? '/dashboard-overview' : '/home');
+  const role = String(user?.role || '').toLowerCase();
+  const homeRoute = (role === 'admin' || role === 'recruiter') ? '/admin' : (role === 'user' ? '/dashboard-overview' : '/home');
 
   const PROFILE_PATHS = [
     '/dashboard',
@@ -61,7 +63,7 @@ export default function PageLayout({ children, title, subtitle, actions, fullWid
           </div>
 
           <div className="page-layout__header-actions">
-            {user?.role === 'admin' && (
+            {(role === 'admin' || role === 'recruiter') && (
               <button
                 onClick={() => navigate('/admin')}
                 className="page-layout__header-button page-layout__header-button--accent"
@@ -75,7 +77,18 @@ export default function PageLayout({ children, title, subtitle, actions, fullWid
                 onClick={() => navigate(homeRoute)}
                 className="page-layout__header-button"
               >
-                {user?.role === 'admin' ? 'Admin Home' : 'Dashboard'}
+                {(role === 'admin' || role === 'recruiter') ? 'Admin Home' : 'Dashboard'}
+              </button>
+            )}
+
+            {location.pathname === '/home' && (
+              <button
+                onClick={() => navigate('/dashboard-overview')}
+                className="page-layout__header-button"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                <RiArrowLeftLine />
+                Back to Status
               </button>
             )}
 
@@ -214,11 +227,13 @@ export default function PageLayout({ children, title, subtitle, actions, fullWid
                         label="Phone Number" 
                         value={user?.phone || 'Not provided'} 
                       />
-                      <DropdownInfoItem 
-                        icon={RiBookOpenLine} 
-                        label="Interested Course" 
-                        value={user?.selectedCourse || 'None selected'} 
-                      />
+                      {role !== 'admin' && role !== 'recruiter' && (
+                        <DropdownInfoItem 
+                          icon={RiBookOpenLine} 
+                          label="Interested Course" 
+                          value={user?.selectedCourse || 'None selected'} 
+                        />
+                      )}
                       <DropdownInfoItem 
                         icon={RiShieldUserLine} 
                         label="Member ID" 

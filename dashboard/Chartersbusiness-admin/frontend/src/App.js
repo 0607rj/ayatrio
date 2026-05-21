@@ -4,7 +4,6 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Auth pages removed - Auth is handled by Users Repo
-import DashboardPage from './pages/DashboardPage'; // Profile Branding (existing)
 import DashboardHome from './pages/DashboardHome'; // 🔥 NEW MAIN DASHBOARD
 import LinkedInPage from './pages/LinkedInPage';
 import GitHubPage from './pages/GitHubPage';
@@ -29,18 +28,30 @@ import ProfilePage from './pages/ProfilePage';
 import ContactPage from './pages/ContactPage';
 import DashboardOverview from './pages/DashboardOverview';
 
-const getDefaultRoute = (user) => (user?.role === 'admin' ? '/admin' : (user?.role === 'user' ? '/dashboard-overview' : '/home'));
+const getDefaultRoute = (user) => {
+  const role = String(user?.role || '').toLowerCase();
+  if (role === 'admin' || role === 'recruiter') return '/admin';
+  if (role === 'user') return '/dashboard-overview';
+  return '/home';
+};
 
 // 🔐 Protected route (logged-in users)
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <PageLoader />;
-  if (user) return children;
-  
-  // Redirect to Users Repo for login
-  const mainUrl = process.env.REACT_APP_MAIN_APP_URL || 'http://localhost:3000';
-  window.location.href = `${mainUrl}/login`;
-  return null;
+  if (!user) {
+    // Redirect to Users Repo for login
+    const mainUrl = process.env.REACT_APP_MAIN_APP_URL || 'http://localhost:3000';
+    window.location.href = `${mainUrl}/login`;
+    return null;
+  }
+
+  const role = String(user.role || '').toLowerCase();
+  if (role === 'admin' || role === 'recruiter') {
+    return <Navigate to="/admin" replace />;
+  }
+
+  return children;
 };
 
 // 🔐 Admin-only route
@@ -55,7 +66,8 @@ const AdminRoute = ({ children }) => {
     return null;
   }
 
-  if (user.role !== 'admin') {
+  const role = String(user.role || '').toLowerCase();
+  if (role !== 'admin' && role !== 'recruiter') {
     return <Navigate to="/home" replace />;
   }
 
@@ -91,9 +103,7 @@ function AppRoutes() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
+          <Navigate to="/home" replace />
         }
       />
 

@@ -11,7 +11,7 @@ import {
 } from 'react-icons/ri';
 
 const PROFILE_NAV_ITEMS = [
-  { to: '/dashboard', icon: RiDashboardLine, label: 'Dashboard' },
+  { to: '/home', icon: RiUser3Line, label: 'Enrolled Student' },
   { to: '/linkedin', icon: RiLinkedinBoxLine, label: 'LinkedIn' },
   { to: '/github', icon: RiGithubLine, label: 'GitHub' },
   { to: '/youtube', icon: RiYoutubeLine, label: 'YouTube' },
@@ -29,7 +29,7 @@ const ADMIN_NAV_ITEMS = [
 ];
 
 const PROFILE_PATHS = [
-  '/dashboard',
+  '/home',
   '/linkedin',
   '/github',
   '/youtube',
@@ -45,20 +45,24 @@ export default function Sidebar() {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const pathname = location.pathname || '';
+  const role = String(user?.role || '').toLowerCase();
+
   const hasAiInterviewAccess = (
-    user?.role === 'admin'
-    || user?.role === 'recruiter'
+    role === 'admin'
+    || role === 'recruiter'
     || Object.values(user?.permissions?.aiInterview || {}).some(Boolean)
   );
 
-  const isCandidate = user?.role === 'candidate' || user?.role === 'admin';
+  const isCandidate = role === 'candidate';
+  const isAdminPath = pathname.startsWith('/admin');
+  const isProfileWorkspace = PROFILE_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+
+  const mode = isAdminPath ? 'admin' : isProfileWorkspace ? 'profile' : 'home';
 
   let homeNavItems = [];
-
   if (isCandidate) {
     homeNavItems = [
-      { to: '/home', icon: RiUser3Line, label: 'Account' },
-      { to: '/dashboard', icon: RiDashboardLine, label: 'Profile Dashboard' },
+      { to: '/home', icon: RiUser3Line, label: 'Enrolled Student' },
       { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Status' },
       { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' },
       ...(hasAiInterviewAccess
@@ -66,17 +70,12 @@ export default function Sidebar() {
         : [{ icon: RiRobotLine, label: 'AI Interview', disabled: true, note: 'Access required' }])
     ];
   } else {
+    // Non-candidate dashboard users
     homeNavItems = [
       { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Dashboard' },
       { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' }
     ];
   }
-
-  const isHome = pathname === '/home';
-  const isProfileWorkspace = PROFILE_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
-  const isAdmin = user?.role === 'admin' || pathname.startsWith('/admin');
-
-  const mode = isHome ? 'home' : isProfileWorkspace ? 'profile' : isAdmin ? 'admin' : 'home';
 
   const navItems = mode === 'profile'
     ? PROFILE_NAV_ITEMS
@@ -84,16 +83,16 @@ export default function Sidebar() {
       ? ADMIN_NAV_ITEMS
       : homeNavItems;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   const headerCopy = mode === 'profile'
     ? { title: 'Navigation', subtitle: 'Explore your branding profile' }
     : mode === 'admin'
       ? { title: 'Admin', subtitle: 'Manage platform modules' }
       : { title: 'Quick Access', subtitle: 'Account and core modules' };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const sidebarClassName = collapsed ? 'sidebar sidebar--collapsed' : 'sidebar';
   const getItemClassName = ({ isActive, disabled }) => [
@@ -146,11 +145,15 @@ export default function Sidebar() {
             );
           }
 
+          // Since NavLink isActive matches exactly or starts with, let's treat Enrolled Student (/home) carefully
+          // so it doesn't stay active on every other profile path like /linkedin, unless pathname is exactly /home.
+          const isNavItemActive = to === '/home' ? pathname === '/home' : pathname === to || pathname.startsWith(`${to}/`);
+
           return (
             <NavLink
               key={to}
               to={to}
-              className={({ isActive }) => getItemClassName({ isActive, disabled: false })}
+              className={getItemClassName({ isActive: isNavItemActive, disabled: false })}
               title={collapsed ? label : undefined}
             >
               <Icon className="sidebar__icon" />
