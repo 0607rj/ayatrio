@@ -61,7 +61,6 @@ export default function Sidebar() {
       { to: '/dashboard', icon: RiDashboardLine, label: 'Profile Dashboard' },
       { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Status' },
       { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' },
-      { to: '/profile', icon: RiUser3Line, label: 'User Info' },
       ...(hasAiInterviewAccess
         ? [{ to: '/ai-interview', icon: RiRobotLine, label: 'AI Interview' }]
         : [{ icon: RiRobotLine, label: 'AI Interview', disabled: true, note: 'Access required' }])
@@ -69,8 +68,7 @@ export default function Sidebar() {
   } else {
     homeNavItems = [
       { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Dashboard' },
-      { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' },
-      { to: '/profile', icon: RiUser3Line, label: 'Profile' }
+      { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' }
     ];
   }
 
