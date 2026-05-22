@@ -97,7 +97,7 @@ export default function UserDropdown() {
           </div>
 
           <button
-            onClick={() => handleRedirect(user?.role === 'user' ? '/dashboard-overview' : '/profile', '/admin/dashboard', 'dashboard')}
+            onClick={() => handleRedirect('/dashboard', '/dashboard', 'dashboard')}
             disabled={!!redirectTarget}
             className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors disabled:opacity-50"
           >

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate as RouterNavigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -27,6 +27,15 @@ import CounselingPage from './pages/CounselingPage';
 import ProfilePage from './pages/ProfilePage';
 import ContactPage from './pages/ContactPage';
 import DashboardOverview from './pages/DashboardOverview';
+
+// Custom Navigate component to preserve URL query parameters (like ?code=...)
+const Navigate = ({ to, replace }) => {
+  const location = useLocation();
+  const toObj = typeof to === 'string'
+    ? { pathname: to, search: location.search }
+    : { pathname: to.pathname, search: to.search || location.search, state: to.state };
+  return <RouterNavigate to={toObj} replace={replace} />;
+};
 
 const getDefaultRoute = (user) => {
   const role = String(user?.role || '').toLowerCase();
@@ -103,7 +112,7 @@ function AppRoutes() {
       <Route
         path="/dashboard"
         element={
-          <Navigate to="/home" replace />
+          <Navigate to={defaultRoute} replace />
         }
       />
 

@@ -31,7 +31,8 @@ export default function PageLayout({ children, title, subtitle, actions, fullWid
     '/website',
     '/credentials',
     '/networking',
-    '/ai-tools'
+    '/ai-tools',
+    '/ai-interview'
   ];
 
   const isProfileWorkspace = PROFILE_PATHS.some((path) => 

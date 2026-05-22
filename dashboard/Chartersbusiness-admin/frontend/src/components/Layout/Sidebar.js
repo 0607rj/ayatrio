@@ -36,7 +36,8 @@ const PROFILE_PATHS = [
   '/website',
   '/credentials',
   '/networking',
-  '/ai-tools'
+  '/ai-tools',
+  '/ai-interview'
 ];
 
 export default function Sidebar() {
@@ -64,10 +65,7 @@ export default function Sidebar() {
     homeNavItems = [
       { to: '/home', icon: RiUser3Line, label: 'Enrolled Student' },
       { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Status' },
-      { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' },
-      ...(hasAiInterviewAccess
-        ? [{ to: '/ai-interview', icon: RiRobotLine, label: 'AI Interview' }]
-        : [{ icon: RiRobotLine, label: 'AI Interview', disabled: true, note: 'Access required' }])
+      { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' }
     ];
   } else {
     // Non-candidate dashboard users
@@ -77,8 +75,15 @@ export default function Sidebar() {
     ];
   }
 
+  const profileNavItems = [
+    ...PROFILE_NAV_ITEMS,
+    ...(hasAiInterviewAccess
+      ? [{ to: '/ai-interview', icon: RiRobotLine, label: 'AI Interview' }]
+      : [{ icon: RiRobotLine, label: 'AI Interview', disabled: true, note: 'Access required' }])
+  ];
+
   const navItems = mode === 'profile'
-    ? PROFILE_NAV_ITEMS
+    ? profileNavItems
     : mode === 'admin'
       ? ADMIN_NAV_ITEMS
       : homeNavItems;
