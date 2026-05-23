@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Auth pages removed - Auth is handled by Users Repo
-import DashboardHome from './pages/DashboardHome'; // 🔥 NEW MAIN DASHBOARD
+import DashboardHome from './pages/DashboardHome'; //NEW MAIN DASHBOARD
 import LinkedInPage from './pages/LinkedInPage';
 import GitHubPage from './pages/GitHubPage';
 import YouTubePage from './pages/YouTubePage';
@@ -38,15 +38,37 @@ const Navigate = ({ to, replace }) => {
 };
 
 const getDefaultRoute = (user) => {
-  const role = String(user?.role || '').toLowerCase();
-  if (role === 'admin' || role === 'recruiter') return '/admin';
-  if (role === 'user') return '/dashboard-overview';
-  return '/home';
+
+  const role = String(
+    user?.role || ''
+  ).toLowerCase();
+
+  if (
+    role === 'admin' ||
+    role === 'recruiter'
+  ) {
+    return '/admin';
+  }
+
+  // IMPORTANT:
+  // normal students/candidates
+
+  if (
+    role === 'user' ||
+    role === 'candidate' ||
+    role === 'student' ||
+    role === 'enrolled_student'
+  ) {
+    return '/dashboard-overview';
+  }
+
+  return '/dashboard-overview';
 };
 
 // 🔐 Protected route (logged-in users)
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
+  console.log(user,loading);
   if (loading) return <PageLoader />;
   if (!user) {
     // Redirect to Users Repo for login
@@ -96,9 +118,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-      {/* Auth is now handled by the Users Repo */}
-
-      {/* 🔥 MAIN DASHBOARD */}
+      
       <Route
         path="/home"
         element={

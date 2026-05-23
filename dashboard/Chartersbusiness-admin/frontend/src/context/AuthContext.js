@@ -73,20 +73,36 @@ export const AuthProvider = ({ children }) => {
     const fallbackPath = isAdminToken ? '/auth/me' : '/admin/auth/me';
 
     try {
+      console.log('PRIMARY PATH:', primaryPath);
       const { data } = await api.get(primaryPath, { skipAuthRedirect: true });
-      if (data?.user) {
-        setUser(data.user);
-        setLoading(false);
-        return;
-      }
+     // console.log(data);
+     if (data?.user) {
+
+  setUser({
+    ...data.user,
+
+    role:
+      data.user.role ||
+      data.user.userCategory ||
+      'user',
+  });
+
+  return;
+}
     } catch (error) {
+      console.log(
+  'PRIMARY FAILED:',
+  error?.response?.status,
+  error?.response?.data
+);
       const status = error?.response?.status;
       if (![401, 403, 404].includes(status)) {
         throw error;
       }
     }
-
+//console.log('FALLBACK PATH:', fallbackPath);
     try {
+      console.log('FALLBACK PATH:', fallbackPath);
       const { data } = await api.get(fallbackPath, { skipAuthRedirect: true });
       if (data?.user) {
         setUser(data.user);
@@ -95,7 +111,12 @@ export const AuthProvider = ({ children }) => {
       }
 
       throw new Error('User payload missing from auth response');
-    } catch {
+    } catch(error) {
+       console.log(
+    'FALLBACK FAILED:',
+    error?.response?.status,
+    error?.response?.data
+  );
       clearSessionToken();
       setUser(null);
     } finally {

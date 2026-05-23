@@ -42,9 +42,17 @@ export default function ChartersInterviewAi() {
     const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
     const hasAttemptedQuickLogin = useRef(false);
     // If already logged in, mark as done immediately
-    useEffect(() => {
-        if (user) setAuthStep('done');
-    }, [user]);
+     useEffect(() => {
+    if (user) {
+        setAuthStep('done');
+        // Automatically redirect to remote dashboard based on role
+        if (user.role === 'admin' || user.role === 'recruiter') {
+            navigateToRemoteDashboard('/admin/dashboard');
+        } else {
+            navigateToRemoteDashboard('/dashboard');
+        }
+    }
+}, [user, navigateToRemoteDashboard]);
 
     // Attempt silent quick login on mount (trustedDevice cookie)
     useEffect(() => {

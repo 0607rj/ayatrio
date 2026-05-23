@@ -46,6 +46,7 @@ interface AuthContextType {
   counselings: Counseling[];
   token: string | null;
   isLoading: boolean;
+  authReady: boolean;
   login: (email: string, password: string) => Promise<string | undefined>;
   loginWithPhone: (idToken: string) => Promise<string | undefined>;
   signupWithPhone: (
@@ -142,6 +143,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [counselings, setCounselings] = useState<Counseling[]>([]);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  //add
+  const [authReady, setAuthReady] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [redirectCode, setRedirectCode] = useState<string | null>(null);
   const [isCodeGenerated, setIsCodeGenerated] = useState(false);
@@ -165,6 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         setToken(null);
         setIsLoading(false);
+        setAuthReady(true);
         return;
       }
 
@@ -223,8 +227,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         setToken(null);
       } finally {
-        setIsLoading(false);
-      }
+        setIsLoading(false); setAuthReady(true);
+}
+      
     };
 
     initAuth();
@@ -456,12 +461,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     throw new Error("Quick login disabled");
   }, []);
 
-  const generateRedirectCode = useCallback(async () => {
-    if (token === "local-dev-token") {
+   const generateRedirectCode = useCallback(async () => {
+    
+     await new Promise((resolve) =>
+    setTimeout(resolve, 1500)
+  );
+
+
+    // 1. Sync fallback: read token from state, localStorage, or cookie
+    let activeToken = 
+      token || 
+      (typeof window !== 'undefined' 
+        ? (localStorage.getItem("token") || getAuthToken()) 
+        : null);
+
+        if (!activeToken) {
+    activeToken =
+      token ||
+      getAuthToken();
+  }
+
+    if (activeToken === "local-dev-token") {
       console.warn("Skipping redirect code generation in local bypass mode");
       return null;
     }
-    if (!token) {
+    if (!activeToken) {
       console.warn("No auth token available for redirect-code generation");
       return null;
     }
@@ -470,7 +494,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${activeToken}`, // 2. Pass the activeToken
         },
         credentials: "include",
       });
@@ -529,6 +553,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Exchanging code failed:", error);
     } finally {
       setIsLoading(false);
+      setAuthReady(true);
     }
   }, [finalizeLogin]);
 
@@ -620,6 +645,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       counselings,
       token,
       isLoading,
+      authReady,
       login,
       loginWithPhone,
       signupWithPhone,
@@ -641,6 +667,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       counselings,
       token,
       isLoading,
+      authReady,
       login,
       loginWithPhone,
       signupWithPhone,
