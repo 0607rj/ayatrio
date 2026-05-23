@@ -462,12 +462,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
    const generateRedirectCode = useCallback(async () => {
-    
-     await new Promise((resolve) =>
-    setTimeout(resolve, 1500)
-  );
-
-
     // 1. Sync fallback: read token from state, localStorage, or cookie
     let activeToken = 
       token || 

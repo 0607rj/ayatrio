@@ -76,19 +76,14 @@ export const AuthProvider = ({ children }) => {
       console.log('PRIMARY PATH:', primaryPath);
       const { data } = await api.get(primaryPath, { skipAuthRedirect: true });
      // console.log(data);
-     if (data?.user) {
-
-  setUser({
-    ...data.user,
-
-    role:
-      data.user.role ||
-      data.user.userCategory ||
-      'user',
-  });
-
-  return;
-}
+      if (data?.user) {
+        setUser({
+          ...data.user,
+          role: data.user.role || data.user.userCategory || 'user',
+        });
+        setLoading(false);
+        return;
+      }
     } catch (error) {
       console.log(
   'PRIMARY FAILED:',

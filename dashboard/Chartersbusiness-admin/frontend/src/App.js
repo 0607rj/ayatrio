@@ -27,6 +27,7 @@ import CounselingPage from './pages/CounselingPage';
 import ProfilePage from './pages/ProfilePage';
 import ContactPage from './pages/ContactPage';
 import DashboardOverview from './pages/DashboardOverview';
+import ApplyFormPage from './pages/ApplyFormPage';
 
 // Custom Navigate component to preserve URL query parameters (like ?code=...)
 const Navigate = ({ to, replace }) => {
@@ -59,10 +60,10 @@ const getDefaultRoute = (user) => {
     role === 'student' ||
     role === 'enrolled_student'
   ) {
-    return '/dashboard-overview';
+    return '/apply-form';
   }
 
-  return '/dashboard-overview';
+  return '/apply-form';
 };
 
 // 🔐 Protected route (logged-in users)
@@ -80,6 +81,33 @@ const ProtectedRoute = ({ children }) => {
   const role = String(user.role || '').toLowerCase();
   if (role === 'admin' || role === 'recruiter') {
     return <Navigate to="/admin" replace />;
+  }
+
+  return children;
+};
+
+// 🔐 Enrolled student only route
+const EnrolledRoute = ({ children }) => {
+  const { user, loading, applications } = useAuth();
+
+  if (loading) return <PageLoader />;
+
+  if (!user) {
+    const mainUrl = process.env.REACT_APP_MAIN_APP_URL || 'http://localhost:3000';
+    window.location.href = `${mainUrl}/login`;
+    return null;
+  }
+
+  const role = String(user.role || '').toLowerCase();
+  if (role === 'admin' || role === 'recruiter') {
+    return children;
+  }
+
+  const isApproved = (applications || []).some((app) => app.status === 'approved');
+  const isEnrolled = isApproved || role === 'enrolled_student' || role === 'candidate';
+
+  if (!isEnrolled) {
+    return <Navigate to="/apply-form" replace />;
   }
 
   return children;
@@ -113,8 +141,18 @@ const PageLoader = () => (
 );
 
 function AppRoutes() {
-  const { user } = useAuth();
-  const defaultRoute = getDefaultRoute(user);
+  const { user, applications } = useAuth();
+  
+  const role = String(user?.role || '').toLowerCase();
+  const isApproved = (applications || []).some((app) => app.status === 'approved');
+  const isEnrolled = isApproved || role === 'enrolled_student' || role === 'candidate';
+
+  let defaultRoute = '/apply-form';
+  if (role === 'admin' || role === 'recruiter') {
+    defaultRoute = '/admin';
+  } else if (isEnrolled) {
+    defaultRoute = '/home';
+  }
 
   return (
     <Routes>
@@ -122,9 +160,9 @@ function AppRoutes() {
       <Route
         path="/home"
         element={
-          <ProtectedRoute>
+          <EnrolledRoute>
             <DashboardHome />
-          </ProtectedRoute>
+          </EnrolledRoute>
         }
       />
 
@@ -148,7 +186,8 @@ function AppRoutes() {
       <Route path="/ai-interview/:id" element={<ProtectedRoute><AIInterviewPage /></ProtectedRoute>} />
 
       {/* Additionals */}
-      <Route path="/application-status" element={<ProtectedRoute><ApplicationStatusPage /></ProtectedRoute>} />
+      <Route path="/apply-form" element={<ProtectedRoute><ApplyFormPage /></ProtectedRoute>} />
+      <Route path="/application-status" element={<ProtectedRoute><DashboardOverview /></ProtectedRoute>} />
       <Route path="/counseling" element={<ProtectedRoute><CounselingPage /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/contact" element={<ProtectedRoute><ContactPage /></ProtectedRoute>} />

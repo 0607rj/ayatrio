@@ -125,3 +125,4 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 export default app;
+// Trigger restart to load new MONGODB_URI environment variable

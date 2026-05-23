@@ -7,11 +7,11 @@ import {
   RiRobotLine, RiLogoutBoxLine, RiMenuFoldLine,
   RiMenuUnfoldLine, RiUser3Line, RiSettings3Line,
   RiBriefcaseLine, RiBookOpenLine, RiLock2Line,
-  RiChatVoiceLine
+  RiChatVoiceLine, RiFileLine
 } from 'react-icons/ri';
 
 const PROFILE_NAV_ITEMS = [
-  { to: '/home', icon: RiUser3Line, label: 'Enrolled Student' },
+  { to: '/home', icon: RiUser3Line, label: 'Enrolled Students' },
   { to: '/linkedin', icon: RiLinkedinBoxLine, label: 'LinkedIn' },
   { to: '/github', icon: RiGithubLine, label: 'GitHub' },
   { to: '/youtube', icon: RiYoutubeLine, label: 'YouTube' },
@@ -41,7 +41,7 @@ const PROFILE_PATHS = [
 ];
 
 export default function Sidebar() {
-  const { user, logout } = useAuth();
+  const { user, logout, applications } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
@@ -54,24 +54,26 @@ export default function Sidebar() {
     || Object.values(user?.permissions?.aiInterview || {}).some(Boolean)
   );
 
-  const isCandidate = role === 'candidate';
+  const isApproved = (applications || []).some((app) => app.status === 'approved');
+  const isEnrolled = isApproved || role === 'enrolled_student' || role === 'candidate';
   const isAdminPath = pathname.startsWith('/admin');
   const isProfileWorkspace = PROFILE_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
   const mode = isAdminPath ? 'admin' : isProfileWorkspace ? 'profile' : 'home';
 
   let homeNavItems = [];
-  if (isCandidate) {
+  if (isEnrolled) {
     homeNavItems = [
-      { to: '/home', icon: RiUser3Line, label: 'Enrolled Student' },
-      { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Status' },
+      { to: '/home', icon: RiUser3Line, label: 'Enrolled Students' },
+      { to: '/application-status', icon: RiDashboardLine, label: 'Status' },
       { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' }
     ];
   } else {
-    // Non-candidate dashboard users
     homeNavItems = [
-      { to: '/dashboard-overview', icon: RiDashboardLine, label: 'Dashboard' },
-      { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' }
+      { to: '/apply-form', icon: RiFileLine, label: 'Apply Form' },
+      { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' },
+      { to: '/application-status', icon: RiDashboardLine, label: 'Status' },
+      { icon: RiUser3Line, label: 'Enrolled Students', disabled: true, note: 'Admin approval required' }
     ];
   }
 

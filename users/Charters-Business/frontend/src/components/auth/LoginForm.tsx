@@ -14,7 +14,7 @@ export default function LoginForm({
   mode?: LoginFormMode;
 }) {
   const isSignup = mode === 'signup';
-  const { user, isLoading, quickLogin, navigateToRemoteDashboard } = useAuth();
+  const { user, isLoading, applications, navigateToRemoteDashboard } = useAuth();
   const router = useRouter();
   const [isQuickLoggingIn, setIsQuickLoggingIn] = useState(false);
   const hasAttemptedQuickLogin = useRef(false);
@@ -24,10 +24,15 @@ export default function LoginForm({
       if (user.role === 'admin' || user.role === 'recruiter') {
         navigateToRemoteDashboard('/admin/dashboard');
       } else {
-        navigateToRemoteDashboard('/dashboard');
+        const isApproved = (applications || []).some((app) => app.status === 'approved');
+        if (!isApproved) {
+          navigateToRemoteDashboard('/dashboard');
+        } else {
+          router.push('/dashboard');
+        }
       }
     }
-  }, [user, isLoading, navigateToRemoteDashboard]);
+  }, [user, isLoading, applications, navigateToRemoteDashboard, router]);
 
   if (isLoading || user) {
     return (

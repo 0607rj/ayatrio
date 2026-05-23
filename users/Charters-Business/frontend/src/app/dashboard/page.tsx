@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import CounsellorContact from '@/components/dashboard/CounsellorContact';
 
 export default function DashboardPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, applications, navigateToRemoteDashboard } = useAuth();
   const router = useRouter();
   const [showWelcome, setShowWelcome] = useState(false);
 
@@ -25,13 +25,20 @@ export default function DashboardPage() {
       return;
     }
 
+    // Redirect non-enrolled/non-approved users to remote dashboard
+    const isApproved = (applications || []).some((app) => app.status === 'approved');
+    if (!isApproved) {
+      navigateToRemoteDashboard('/dashboard');
+      return;
+    }
+
     const justLoggedIn = sessionStorage.getItem('justLoggedIn');
     if (justLoggedIn === 'true') {
       setShowWelcome(true);
       sessionStorage.removeItem('justLoggedIn');
       setTimeout(() => setShowWelcome(false), 5000);
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, applications, navigateToRemoteDashboard, router]);
 
   // Show loading while checking
   if (isLoading) {
