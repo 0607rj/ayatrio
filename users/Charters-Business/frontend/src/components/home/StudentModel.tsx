@@ -234,7 +234,7 @@ function StudentModel({ data }: StudentModelProps) {
     const scrollContainer = slidesContainerRef.current;
     if (!scrollContainer) return;
     setIsAnimating(true);
-    const scrollAmount = scrollContainer.clientWidth * 0.6;
+    const scrollAmount = scrollContainer.clientWidth / 3.5;
     scrollContainer.scrollTo({
       left: scrollContainer.scrollLeft + direction * scrollAmount,
       behavior: "smooth",
@@ -316,7 +316,7 @@ function StudentModel({ data }: StudentModelProps) {
               {filteredStudents.map((student, index) => (
                 <article
                   key={student.name}
-                  className="flex-none w-[85vw] sm:w-[420px] snap-start mr-0 first:ml-0 overflow-hidden border border-gray-200 border-r-0 bg-white"                >
+                  className="flex-none w-[28.571%] snap-start mr-0 first:ml-0 overflow-hidden border border-gray-200 border-r-0 bg-white"                >
                   {/* Top — full image */}
                   <div className="w-full">
                     <Image
