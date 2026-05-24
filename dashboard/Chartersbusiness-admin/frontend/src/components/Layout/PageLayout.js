@@ -59,7 +59,9 @@ export default function PageLayout({ children, title, subtitle, actions, fullWid
     <div className="page-layout">
       <header className="page-layout__header">
         <div className="page-layout__header-inner">
-          <div className="page-layout__brand" onClick={() => navigate(homeRoute)}>
+          <div className="page-layout__brand" onClick={() => {
+            window.location.href = process.env.REACT_APP_MAIN_APP_URL || 'http://localhost:3000';
+          }}>
             <BrandMark compact />
           </div>
 

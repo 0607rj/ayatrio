@@ -74,8 +74,12 @@ describe('PageLayout', () => {
     expect(buttonLabels).toEqual(expect.arrayContaining(['Create', 'Admin', 'Admin Home']));
   });
 
-  it('navigates to the admin home route when the brand mark is clicked', () => {
+  it('redirects to the home screen when the brand mark is clicked', () => {
     useLocation.mockReturnValue({ pathname: '/admin/jobs' });
+
+    const originalLocation = window.location;
+    delete window.location;
+    window.location = { href: '' };
 
     flushSync(() => {
       root.render(
@@ -90,6 +94,8 @@ describe('PageLayout', () => {
 
     brandMark.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
-    expect(navigate).toHaveBeenCalledWith('/admin');
+    expect(window.location.href).toBe('http://localhost:3000');
+
+    window.location = originalLocation;
   });
 });
