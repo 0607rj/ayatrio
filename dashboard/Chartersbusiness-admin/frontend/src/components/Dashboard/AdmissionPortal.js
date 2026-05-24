@@ -7,6 +7,7 @@ const STEPS = [
   { id: "academics", label: "Academics", sub: "Education" },
   { id: "documents", label: "Documents", sub: "Upload files" },
   { id: "payment",   label: "Payment",   sub: "Fee & submit" },
+  { id: "status",    label: "Status",    sub: "Approval status" },
 ];
 
 const PROGRAMS = [
@@ -131,25 +132,44 @@ function DraftBanner({ completedSteps, onResume }) {
   );
 }
 
-function ReviewingState({ personalData }) {
+function ReviewingState({ personalData, status }) {
+  const statusLabels = {
+    pending: { label: "Pending Review", desc: "Your application has been received and is in queue.", color: "var(--gold)", bg: "var(--gold-dim)" },
+    under_review: { label: "Under Review", desc: "Our admissions team is actively reviewing your details.", color: "var(--navy)", bg: "var(--surface-tint)" },
+    approved: { label: "Approved", desc: "Congratulations! Your application has been approved.", color: "var(--green)", bg: "var(--green-dim)" },
+    rejected: { label: "Rejected", desc: "We regret to inform you that your application was not approved.", color: "var(--red)", bg: "var(--red-dim)" }
+  };
+
+  const currentStatus = statusLabels[status] || { label: "Under Review", desc: "Our admissions team is reviewing your application.", color: "var(--green)", bg: "var(--green-dim)" };
+
   return (
     <div style={{ padding: "2.5rem" }}>
+      <div style={{ marginBottom: "1.75rem" }}>
+        <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)" }}>
+          Step 5 of 5
+        </p>
+        <h2 style={{ margin: "0 0 6px", fontSize: 28, fontWeight: 800, color: "var(--text-primary)" }}>Admission status</h2>
+        <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>
+          Track the progress of your application review.
+        </p>
+      </div>
+
       <div style={{
-        background: "var(--green-dim)", border: "1px solid var(--green)",
+        background: currentStatus.bg, border: `1px solid ${currentStatus.color}`,
         padding: "2rem", textAlign: "center", marginBottom: "1.5rem",
       }}>
         <div style={{
-          width: 56, height: 56, background: "var(--green)", margin: "0 auto 16px",
+          width: 56, height: 56, background: currentStatus.color, margin: "0 auto 16px",
           display: "flex", alignItems: "center", justifyContent: "center",
           color: "#fff", fontSize: 28,
         }}>
           <RiCheckLine />
         </div>
-        <h3 style={{ margin: "0 0 8px", color: "var(--green)", fontWeight: 800, fontSize: 20 }}>
-          Application submitted successfully
+        <h3 style={{ margin: "0 0 8px", color: currentStatus.color, fontWeight: 800, fontSize: 20 }}>
+          {currentStatus.label}
         </h3>
         <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>
-          Our admissions team is reviewing your application.<br />
+          {currentStatus.desc}<br />
           You'll hear back within 3–5 business days.
         </p>
       </div>
@@ -195,7 +215,7 @@ function PersonalStep({ data, onChange, onNext }) {
     <div className="fade-up">
       <div style={{ marginBottom: "1.75rem" }}>
         <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)" }}>
-          Step 1 of 4
+          Step 1 of 5
         </p>
         <h2 style={{ margin: "0 0 6px", fontSize: 28, fontWeight: 800, color: "var(--text-primary)" }}>Personal details</h2>
         <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -274,7 +294,7 @@ function AcademicsStep({ data, onChange, onNext, onBack }) {
     <div className="fade-up">
       <div style={{ marginBottom: "1.75rem" }}>
         <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)" }}>
-          Step 2 of 4
+          Step 2 of 5
         </p>
         <h2 style={{ margin: "0 0 6px", fontSize: 28, fontWeight: 800, color: "var(--text-primary)" }}>Academic background</h2>
         <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -342,7 +362,7 @@ function DocumentsStep({ data, onChange, onNext, onBack }) {
     <div className="fade-up">
       <div style={{ marginBottom: "1.75rem" }}>
         <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)" }}>
-          Step 3 of 4
+          Step 3 of 5
         </p>
         <h2 style={{ margin: "0 0 6px", fontSize: 28, fontWeight: 800, color: "var(--text-primary)" }}>Upload documents</h2>
         <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -430,7 +450,7 @@ function PaymentStep({ personalData, onSubmit, onBack, isSubmitting, paymentMeth
     <div className="fade-up">
       <div style={{ marginBottom: "1.75rem" }}>
         <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)" }}>
-          Step 4 of 4
+          Step 4 of 5
         </p>
         <h2 style={{ margin: "0 0 6px", fontSize: 28, fontWeight: 800, color: "var(--text-primary)" }}>Application fee</h2>
         <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -532,6 +552,9 @@ export default function AdmissionPortal({ existingApplication = null }) {
   // ✅ FIXED: trust completedSteps and currentStep directly from the server
   const deriveCompleted = (app) => {
     if (!app) return [];
+    if (app.status && app.status !== "draft") {
+      return ["personal", "academics", "documents", "payment", "status"];
+    }
     // Use server-stored completedSteps if available
     if (app.completedSteps?.length > 0) return [...app.completedSteps];
     // Fallback: derive from presence of data
@@ -545,6 +568,7 @@ export default function AdmissionPortal({ existingApplication = null }) {
   // ✅ FIXED: use currentStep from server directly
   const deriveStep = (app) => {
     if (!app) return "personal";
+    if (app.status && app.status !== "draft") return "status";
     // Trust the server's currentStep — it's always up to date
     if (app.currentStep && app.currentStep !== "submitted") return app.currentStep;
     // Fallback: derive from completedSteps
@@ -649,7 +673,9 @@ export default function AdmissionPortal({ existingApplication = null }) {
         amount: 1999,
       });
       markComplete("payment");
+      markComplete("status");
       setSubmitted(true);
+      setCurrentStep("status");
     } catch (err) {
       setApiError(err?.response?.data?.message || err?.message || "Payment failed. Please try again.");
     } finally {
@@ -657,17 +683,8 @@ export default function AdmissionPortal({ existingApplication = null }) {
     }
   };
 
-  const isDraft = completedSteps.length > 0 && completedSteps.length < STEPS.length && !submitted;
+  const isDraft = completedSteps.length > 0 && completedSteps.length < STEPS.length && !submitted && currentStep !== "status";
   const goTo = (step) => { setApiError(null); setCurrentStep(step); };
-
-  if (submitted) {
-    return (
-      <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
-        <StepIndicator currentStep="payment" completedSteps={STEPS.map(s => s.id)} />
-        <ReviewingState personalData={personalData} />
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -717,6 +734,9 @@ export default function AdmissionPortal({ existingApplication = null }) {
               paymentMethod={paymentMethod}
               onMethodChange={setPaymentMethod}
             />
+          )}
+          {currentStep === "status" && (
+            <ReviewingState personalData={personalData} status={existingApplication?.status || (submitted ? "pending" : null)} />
           )}
         </div>
       </div>

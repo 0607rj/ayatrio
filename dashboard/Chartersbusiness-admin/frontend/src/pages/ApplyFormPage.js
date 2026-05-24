@@ -16,12 +16,7 @@ const ApplyFormPage = () => {
     const latestApp = applications?.[0] || null;
     const hasSubmittedApplication = latestApp && latestApp.status !== 'draft';
 
-    useEffect(() => {
-        if (!loadingApps && hasSubmittedApplication) {
-            // Redirect to status page if application is already submitted
-            navigate('/application-status', { replace: true });
-        }
-    }, [loadingApps, hasSubmittedApplication, navigate]);
+
 
     if (loadingApps) {
         return (

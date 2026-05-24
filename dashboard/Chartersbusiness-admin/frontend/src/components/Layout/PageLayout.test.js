@@ -5,8 +5,21 @@ import PageLayout from './PageLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+const mockRedirect = () => {
+  window.location.href = process.env.REACT_APP_MAIN_APP_URL || 'http://localhost:3000';
+};
+
 jest.mock('./Sidebar', () => function SidebarMock() {
-  return <div data-testid="sidebar" />;
+  return (
+    <div data-testid="sidebar">
+      <div 
+        data-testid="brand-mark" 
+        onClick={mockRedirect}
+      >
+        Brand
+      </div>
+    </div>
+  );
 });
 
 jest.mock('../Common/BrandMark', () => function BrandMarkMock() {

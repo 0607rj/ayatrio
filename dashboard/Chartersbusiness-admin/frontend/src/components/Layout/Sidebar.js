@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import BrandMark from '../Common/BrandMark';
 import {
   RiDashboardLine, RiLinkedinBoxLine, RiGithubLine,
   RiGlobalLine, RiAwardLine, RiGroupLine, RiYoutubeLine,
-  RiRobotLine, RiLogoutBoxLine, RiMenuFoldLine,
+  RiRobotLine, RiMenuFoldLine,
   RiMenuUnfoldLine, RiUser3Line, RiSettings3Line,
   RiBriefcaseLine, RiBookOpenLine, RiLock2Line,
   RiChatVoiceLine, RiFileLine
@@ -45,6 +46,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [showLockedFeatures, setShowLockedFeatures] = useState(false);
   const pathname = location.pathname || '';
   const role = String(user?.role || '').toLowerCase();
 
@@ -72,9 +74,27 @@ export default function Sidebar() {
     homeNavItems = [
       { to: '/apply-form', icon: RiFileLine, label: 'Apply Form' },
       { to: '/counseling', icon: RiChatVoiceLine, label: 'Counseling' },
-      { to: '/application-status', icon: RiDashboardLine, label: 'Status' },
-      { icon: RiUser3Line, label: 'Enrolled Students', disabled: true, note: 'Admin approval required' }
+      { 
+        icon: RiUser3Line, 
+        label: 'Enrolled Students', 
+        onClick: () => setShowLockedFeatures(!showLockedFeatures),
+        isExpandable: true,
+        isOpen: showLockedFeatures
+      }
     ];
+
+    if (showLockedFeatures) {
+      homeNavItems.push(
+        { icon: RiLinkedinBoxLine, label: 'LinkedIn', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiGithubLine, label: 'GitHub', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiYoutubeLine, label: 'YouTube', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiGlobalLine, label: 'Website', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiAwardLine, label: 'Credentials', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiGroupLine, label: 'Networking', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiRobotLine, label: 'AI Tools', disabled: true, note: 'Admin approval required', isSubItem: true },
+        { icon: RiRobotLine, label: 'AI Interview', disabled: true, note: 'Admin approval required', isSubItem: true }
+      );
+    }
   }
 
   const profileNavItems = [
@@ -96,11 +116,6 @@ export default function Sidebar() {
       ? { title: 'Admin', subtitle: 'Manage platform modules' }
       : { title: 'Quick Access', subtitle: 'Account and core modules' };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   const sidebarClassName = collapsed ? 'sidebar sidebar--collapsed' : 'sidebar';
   const getItemClassName = ({ isActive, disabled }) => [
     'sidebar__nav-item',
@@ -110,6 +125,23 @@ export default function Sidebar() {
 
   return (
     <aside className={sidebarClassName}>
+      <div className="sidebar__brand-wrapper" style={{
+        padding: collapsed ? '16px 8px' : '20px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: collapsed ? 'center' : 'flex-start',
+        borderBottom: '1px solid var(--border)',
+        height: '71px',
+        boxSizing: 'border-box'
+      }}>
+        <div 
+          onClick={() => { window.location.href = process.env.REACT_APP_MAIN_APP_URL || 'http://localhost:3000'; }}
+          style={{ cursor: 'pointer' }}
+        >
+          <BrandMark compact={collapsed} />
+        </div>
+      </div>
+
       <div className="sidebar__header">
         {!collapsed && (
           <div className="sidebar__intro">
@@ -126,7 +158,35 @@ export default function Sidebar() {
       </div>
 
       <nav className="sidebar__nav">
-        {navItems.map(({ to, icon: Icon, label, disabled, note }) => {
+        {navItems.map(({ to, icon: Icon, label, disabled, note, onClick, isExpandable, isOpen, isSubItem }) => {
+          const itemStyle = isSubItem 
+            ? { paddingLeft: collapsed ? '12px' : '36px', opacity: 0.7 } 
+            : {};
+
+          if (onClick) {
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={onClick}
+                className={getItemClassName({ isActive: false, disabled: false })}
+                style={{ cursor: 'pointer', width: 'calc(100% - 24px)', ...itemStyle }}
+              >
+                <Icon className="sidebar__icon" />
+                {!collapsed && (
+                  <span className="sidebar__label-group" style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{label}</span>
+                    {isExpandable && (
+                      <span style={{ fontSize: '11px', opacity: 0.7 }}>
+                        {isOpen ? '▼' : '▶'}
+                      </span>
+                    )}
+                  </span>
+                )}
+              </button>
+            );
+          }
+
           if (disabled || !to) {
             return (
               <button
@@ -135,6 +195,7 @@ export default function Sidebar() {
                 disabled
                 className={getItemClassName({ isActive: false, disabled: true })}
                 title={collapsed ? `${label}${note ? ` (${note})` : ''}` : undefined}
+                style={itemStyle}
               >
                 <Icon className="sidebar__icon" />
                 {!collapsed && (
@@ -162,6 +223,7 @@ export default function Sidebar() {
               to={to}
               className={getItemClassName({ isActive: isNavItemActive, disabled: false })}
               title={collapsed ? label : undefined}
+              style={itemStyle}
             >
               <Icon className="sidebar__icon" />
               {!collapsed && <span>{label}</span>}
@@ -169,17 +231,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="sidebar__footer">
-        <button
-          onClick={handleLogout}
-          className="sidebar__logout"
-          title={collapsed ? 'Logout' : undefined}
-        >
-          <RiLogoutBoxLine className="sidebar__icon" />
-          {!collapsed && <span>Logout</span>}
-        </button>
-      </div>
     </aside>
   );
 }
