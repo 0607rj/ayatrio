@@ -6,9 +6,9 @@ import User from "./src/models/User.model.js";
 const run = async () => {
   await connectDB();
   
-  const adminPhone = "+911234567890";
-  const adminEmail = "admin@chartersbusiness.com";
-  const adminPassword = "SecureAdmin123!";
+  const adminPhone = process.env.SEED_ADMIN_PHONE || "+911234567890";
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@chartersbusiness.com";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "SecureAdmin123!";
 
   console.log("Cleaning up old admin records if any...");
   // Delete any existing user with this phone or email to start fresh

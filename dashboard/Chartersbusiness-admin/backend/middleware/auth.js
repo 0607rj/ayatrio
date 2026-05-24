@@ -163,6 +163,7 @@ exports.protect = async (req, res, next) => {
         name: decoded.name || 'Admin',
         role,
         tokenType: 'pb_admin',
+        id: decoded.chartersUserId,
       };
 
       return next();
@@ -170,8 +171,29 @@ exports.protect = async (req, res, next) => {
 
     // Attempt to find in Admin collection first, then User (student accounts)
     let user = await Admin.findById(decoded.id);
+
     if (!user) {
-      user = await UserModel.findById(decoded.id);
+      const rawUser = await UserModel.findById(decoded.id);
+      if (rawUser) {
+        user = rawUser.toObject();
+        user.id = String(rawUser._id);
+        // Fetch permissions and status from CandidateAccess
+        const CandidateAccess = require('../models/CandidateAccess');
+        const access = await CandidateAccess.findOne({ chartersUserId: String(rawUser._id) });
+        if (access) {
+          user.permissions = access.permissions || {};
+          user.userCategory = access.userCategory || 'user';
+          if (access.status) {
+            user.status = access.status;
+          }
+          if (access.userCategory === 'candidate') {
+            user.role = 'candidate';
+          }
+        } else {
+          user.permissions = {};
+          user.userCategory = 'user';
+        }
+      }
     }
 
     if (!user) {
@@ -204,6 +226,10 @@ exports.protect = async (req, res, next) => {
         success: false,
         message: 'Session expired. Please login again.',
       });
+    }
+
+    if (user && !user.id && user._id) {
+      user.id = String(user._id);
     }
 
     req.user = user;
