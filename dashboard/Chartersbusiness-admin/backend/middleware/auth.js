@@ -177,21 +177,34 @@ exports.protect = async (req, res, next) => {
       if (rawUser) {
         user = rawUser.toObject();
         user.id = String(rawUser._id);
-        // Fetch permissions and status from CandidateAccess
-        const CandidateAccess = require('../models/CandidateAccess');
-        const access = await CandidateAccess.findOne({ chartersUserId: String(rawUser._id) });
-        if (access) {
-          user.permissions = access.permissions || {};
-          user.userCategory = access.userCategory || 'user';
-          if (access.status) {
-            user.status = access.status;
-          }
-          if (access.userCategory === 'candidate') {
-            user.role = 'candidate';
+        
+        if (user.role === 'admin' || user.role === 'recruiter') {
+          // Merge permissions and permissionsVersion from Admin collection if exists
+          const adminDoc = await Admin.findOne({ email: user.email });
+          if (adminDoc) {
+            user.permissions = adminDoc.permissions || {};
+            user.permissionsVersion = adminDoc.permissionsVersion || 0;
+          } else {
+            user.permissions = {};
+            user.permissionsVersion = 0;
           }
         } else {
-          user.permissions = {};
-          user.userCategory = 'user';
+          // Fetch permissions and status from CandidateAccess
+          const CandidateAccess = require('../models/CandidateAccess');
+          const access = await CandidateAccess.findOne({ chartersUserId: String(rawUser._id) });
+          if (access) {
+            user.permissions = access.permissions || {};
+            user.userCategory = access.userCategory || 'user';
+            if (access.status) {
+              user.status = access.status;
+            }
+            if (access.userCategory === 'candidate') {
+              user.role = 'candidate';
+            }
+          } else {
+            user.permissions = {};
+            user.userCategory = 'user';
+          }
         }
       }
     }
