@@ -80,10 +80,25 @@ academics: {
 },
 
 documents: {
-  photoId:   { type: String },
-  marksheet: { type: String },
-  photo:     { type: String },
-  workProof: { type: String },
+  photoId: {
+    url: String,
+    publicId: String,
+  },
+
+  marksheet: {
+    url: String,
+    publicId: String,
+  },
+
+  photo: {
+    url: String,
+    publicId: String,
+  },
+
+  workProof: {
+    url: String,
+    publicId: String,
+  },
 },
 
 payment: {
