@@ -6,7 +6,9 @@ const UserModel = UserModelRaw.default || UserModelRaw;
 const asyncHandler = require('../utils/asyncHandler.js');
 const ApiResponse = require('../utils/ApiResponse.js');
 const ApiError = require('../utils/ApiError.js');
-
+const {
+  uploadAdmissionDocument,
+} = require('../utils/cloudinaryUpload.util');
 const findUserById = async (id) => {
   const user = await UserModel.findById(id);
   return user || Admin.findById(id);
@@ -136,32 +138,125 @@ exports.updateAcademics = asyncHandler(async (req, res) => {
 
 
 // ── PUT /applications/:id/documents ──────────────────────────
-exports.updateDocuments = asyncHandler(async (req, res) => {
-  const files    = req.files || {};
-  const photoId   = files.photoId?.[0]?.path;
-  const marksheet = files.marksheet?.[0]?.path;
-  const photo     = files.photo?.[0]?.path;
-  const workProof = files.workProof?.[0]?.path;
+// const {
+//   uploadAdmissionDocument,
+// } = require('../utils/cloudinary');
 
-  if (!photoId || !marksheet || !photo) {
-    throw new ApiError(400, 'Please upload all required documents');
+
+// ── PUT /applications/:id/documents ──────────────────────────
+exports.updateDocuments = asyncHandler(async (req, res) => {
+  const files = req.files || {};
+
+  // Required documents
+  if (
+    !files.photoId?.[0] ||
+    !files.marksheet?.[0] ||
+    !files.photo?.[0]
+  ) {
+    throw new ApiError(
+      400,
+      'Please upload all required documents'
+    );
   }
 
-  const application = await Application.findOneAndUpdate(
-    { _id: req.params.id, userId: req.user._id || req.user.id },
-    {
-      documents: { photoId, marksheet, photo, workProof },
-      currentStep: 'payment',
-      $addToSet: { completedSteps: 'documents' },
+  const userId = req.user._id || req.user.id;
+
+  // ==========================================
+  // Upload Required Documents
+  // ==========================================
+
+  const [
+    photoIdUpload,
+    marksheetUpload,
+    photoUpload,
+  ] = await Promise.all([
+    uploadAdmissionDocument(
+      files.photoId[0].buffer,
+      'photoId',
+      userId
+    ),
+
+    uploadAdmissionDocument(
+      files.marksheet[0].buffer,
+      'marksheet',
+      userId
+    ),
+
+    uploadAdmissionDocument(
+      files.photo[0].buffer,
+      'photo',
+      userId
+    ),
+  ]);
+
+
+  let workProofUpload = null;
+
+  if (files.workProof?.[0]) {
+    workProofUpload = await uploadAdmissionDocument(
+      files.workProof[0].buffer,
+      'workProof',
+      userId
+    );
+  }
+
+
+  const documents = {
+    photoId: {
+      url: photoIdUpload.url,
+      publicId: photoIdUpload.publicId,
     },
-    { new: true }
+
+    marksheet: {
+      url: marksheetUpload.url,
+      publicId: marksheetUpload.publicId,
+    },
+
+    photo: {
+      url: photoUpload.url,
+      publicId: photoUpload.publicId,
+    },
+
+    workProof: workProofUpload
+      ? {
+          url: workProofUpload.url,
+          publicId: workProofUpload.publicId,
+        }
+      : null,
+  };
+
+  const application = await Application.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      userId,
+    },
+    {
+      documents,
+      currentStep: 'payment',
+
+      $addToSet: {
+        completedSteps: 'documents',
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
   );
 
-  if (!application) throw new ApiError(404, 'Application not found');
+  if (!application) {
+    throw new ApiError(404, 'Application not found');
+  }
 
-  res.status(200).json(new ApiResponse(200, application, 'Documents uploaded successfully'));
+ 
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      application,
+      'Documents uploaded successfully'
+    )
+  );
 });
-
 
 // ── PUT /applications/:id/payment ────────────────────────────
 exports.updatePayment = asyncHandler(async (req, res) => {
